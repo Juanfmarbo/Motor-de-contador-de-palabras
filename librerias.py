@@ -233,11 +233,192 @@ Ultima Linea donde se vio: {registro[3]}""")
 
 
 
-def Busqueda_simple():
-    pass
+def Busqueda_simple(datos):
+    palabra = input("Ingrese la palabra que desea buscar: ").strip()
 
-def Busqueda_prefijo():
-    pass
+    if not palabra:
+        print("Error: debe ingresar una palabra.")
+        return
+
+    inicio = time.perf_counter()
+
+    palabra_normalizada = palabra.casefold()
+
+    indice = datos["indice_simple"]
+
+    posiciones = indice.get(palabra_normalizada)
+
+    if posiciones is None:
+        fin = time.perf_counter()
+        tiempo_ms = (fin - inicio) * 1000
+
+        print("\nLa palabra no se encuentra en el archivo.")
+        print(f"Tiempo de búsqueda: {tiempo_ms:.6f} ms")
+        input("Presione enter para continuar: ")
+        return
+
+    cantidad = len(posiciones)
+
+    primera_posicion = posiciones[0]
+    ultima_posicion = posiciones[-1]
+
+    lineas = datos["lineas"]
+
+    primera_linea = lineas[primera_posicion]
+    ultima_linea = lineas[ultima_posicion]
+
+    fin = time.perf_counter()
+    tiempo_ms = (fin - inicio) * 1000
+
+    print("\n--------- BÚSQUEDA SIMPLE ---------")
+    print(f"Palabra buscada: {palabra}")
+    print(f"Cantidad de apariciones: {cantidad}")
+    print(f"Primera línea: {primera_linea}")
+    print(f"Última línea: {ultima_linea}")
+
+    print("----------------------------------")
+    print(f"Tiempo de búsqueda: {tiempo_ms:.6f} ms")
+    input("Presione enter para continuar: ")
+
+
+
+def Busqueda_prefijo(datos):
+    from bisect import bisect_left
+    from heapq import merge
+
+    prefijo = input("Ingrese el prefijo que desea buscar: ").strip()
+
+    if not prefijo:
+        print("Error: debe ingresar al menos un carácter.")
+        return
+
+    prefijo = prefijo.casefold()
+
+    claves = datos["claves_ordenadas"]
+    indice = datos["indice_simple"]
+
+    orden_ids = datos["orden_ids"]
+    vocabulario = datos["vocabulario"]
+    lineas = datos["lineas"]
+
+    inicio = time.perf_counter()
+
+    # ---------------------------------
+    # 1. BUSQUEDA BINARIA
+    # ---------------------------------
+
+    posicion = bisect_left(claves, prefijo)
+
+    coincidencias = []
+
+    while posicion < len(claves):
+
+        palabra = claves[posicion]
+
+        if not palabra.startswith(prefijo):
+            break
+
+        coincidencias.append(palabra)
+
+        posicion += 1
+
+    # ---------------------------------
+    # 2. VALIDAR RESULTADOS
+    # ---------------------------------
+
+    if not coincidencias:
+
+        fin = time.perf_counter()
+        tiempo_ms = (fin - inicio) * 1000
+
+        print("\nNo se encontraron palabras con ese prefijo.")
+        print(f"Tiempo de búsqueda: {tiempo_ms:.6f} ms")
+        input("Presione enter para continuar: ")
+        return
+
+    # ---------------------------------
+    # 3. CALCULAR ESTADISTICAS
+    # ---------------------------------
+
+    cantidad = 0
+    primera_posicion = None
+    ultima_posicion = None
+
+    for palabra in coincidencias:
+
+        posiciones = indice[palabra]
+
+        cantidad += len(posiciones)
+
+        primera = posiciones[0]
+
+        ultima = posiciones[-1]
+
+        if primera_posicion is None or primera < primera_posicion:
+            primera_posicion = primera
+
+        if ultima_posicion is None or ultima > ultima_posicion:
+            ultima_posicion = ultima
+
+    primera_palabra = vocabulario[
+        orden_ids[primera_posicion]
+    ]
+
+    ultima_palabra = vocabulario[
+        orden_ids[ultima_posicion]
+    ]
+
+    primera_linea = lineas[primera_posicion]
+    ultima_linea = lineas[ultima_posicion]
+
+    fin = time.perf_counter()
+    tiempo_ms = (fin - inicio) * 1000
+
+    # ---------------------------------
+    # 4. MOSTRAR TODAS LAS APARICIONES
+    # ---------------------------------
+
+    print("\n--------- BÚSQUEDA POR PREFIJO ---------")
+
+    print(f"Prefijo buscado: {prefijo}")
+    print(f"Palabras diferentes encontradas: {len(coincidencias)}")
+    print(f"Total de apariciones: {cantidad}")
+
+    print("\nApariciones en el orden original:\n")
+
+    posiciones_ordenadas = merge(
+        *(indice[palabra] for palabra in coincidencias)
+    )
+
+    for posicion in posiciones_ordenadas:
+
+        identificador = orden_ids[posicion]
+
+        palabra_original = vocabulario[identificador]
+
+        numero_linea = lineas[posicion]
+
+        print(f"{palabra_original} - Línea {numero_linea}")
+
+    # ---------------------------------
+    # 5. RESULTADOS FINALES
+    # ---------------------------------
+
+    print("\n--------- RESULTADOS ---------")
+
+    print(f"Primera palabra: {primera_palabra}")
+    print(f"Primera línea: {primera_linea}")
+
+    print(f"Última palabra: {ultima_palabra}")
+    print(f"Última línea: {ultima_linea}")
+
+    print(f"Total de apariciones: {cantidad}")
+
+    print("----------------------------------")
+    print(f"Tiempo de búsqueda: {tiempo_ms:.6f} ms")
+    print("(No incluye el tiempo de impresión de resultados)")
+    input("Presione enter para continuar: ")
+
 
 def Estadisticas(datos):
     vocabulario=datos["vocabulario"]
