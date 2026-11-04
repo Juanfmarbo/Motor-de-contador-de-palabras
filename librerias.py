@@ -239,11 +239,78 @@ def Busqueda_simple():
 def Busqueda_prefijo():
     pass
 
-def Estadisticas():
-    pass
+def Estadisticas(datos):
+    vocabulario=datos["vocabulario"]
+    orden_ids=datos["orden_ids"]
+    lineas=datos["lineas"]
 
-def palabra_numero():
-    pass
+    #Cantidad total de palabras
+    N=len(orden_ids)
+
+    #Primera palabra
+    primera=vocabulario[orden_ids[0]]
+    linea_primera=lineas[0]
+    #Ultima palabra
+    ultima=vocabulario[orden_ids[N-1]]
+    linea_ultima=lineas[N-1]
+
+    #Posicion central
+    centro=(N+1)//2
+    #Concierte posicion a indice
+    indice_centro=centro-1
+    palabra_central = vocabulario[orden_ids[indice_centro]]
+    linea_central = lineas[indice_centro]
+
+    print("\n===== ESTADÍSTICAS DEL ARCHIVO =====")
+
+    print(f"Cantidad total de palabras: {N}")
+
+    print(f"Primera palabra: {primera}")
+    print(f"Posición: 1 | Línea: {linea_primera}")
+
+    print(f"Última palabra: {ultima}")
+    print(f"Posición: {N} | Línea: {linea_ultima}")
+
+    print(f"Palabra central: {palabra_central}")
+    print(f"Posición: {centro} | Línea: {linea_central}")    
+
+def palabra_numero(datos):
+    vocabulario=datos["vocabulario"]
+    orden_ids=datos["orden_ids"]
+    lineas=datos["lineas"]
+    N=len(orden_ids)
+
+    while True:
+        try:
+            num=int(input(f"Ingrese la posicion de la palabra dentro del rango 1-{N}: "))
+            if num<1 or num>N:
+                print(f"La posicion debe estar dentro del rango 1-{N}")
+                num=int(input("Ingrese numero en el rango correcto"))
+            else:
+                break
+
+        except ValueError:
+            print("Error: debe ingresar un numero entero")
+
+    indice=num-1
+    #inicio del tiempo de busqueda
+    inicio = time.perf_counter()
+
+    identificador=orden_ids[indice]
+    palabra=vocabulario[identificador]
+    linea = lineas[indice]
+    #fin del tiempo de busqueda
+    fin = time.perf_counter()
+    # Calcular tiempo en milisegundos
+    tiempo = (fin - inicio) * 1000
+
+    # Mostrar resultado
+    print("\n===== RESULTADO DE LA BÚSQUEDA =====")
+
+    print(f"Palabra: {palabra}")
+    print(f"Posición: {num}")
+    print(f"Línea: {linea}")
+    print(f"Tiempo de búsqueda: {tiempo:.6f} ms")
 
 def Comparacion(datos):
     palabra = input("Ingrese la palabra que desea buscar: ").strip()

@@ -39,9 +39,9 @@ while Activo:
                 case 4:
                     pass
                 case 5:
-                    pass
+                    lb.Estadisticas(datos)
                 case 6:
-                    pass
+                    lb.palabra_numero(datos)
                 case 7:
                     lb.Comparacion(datos)
         elif elec != 1 and not(Archivo_cargado):
