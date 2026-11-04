@@ -35,9 +35,9 @@ while Activo:
                 case 2:
                     lb.Busqueda(datos)
                 case 3:
-                    pass
+                    lb.Busqueda_simple(datos)
                 case 4:
-                    pass
+                    lb.Busqueda_prefijo(datos)
                 case 5:
                     lb.Estadisticas(datos)
                 case 6:
