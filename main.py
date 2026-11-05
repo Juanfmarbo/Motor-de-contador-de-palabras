@@ -7,16 +7,24 @@ Archivo_cargado = False #bandera que indica cuando el archivo ya este cargado
 #Bucle que mantiene funcionando el codigo
 while Activo:
     try:
-        print("""    Menu     
-1) Cargar Archivo
-2) Búsqueda Exacta 
-3) Búsqueda Simple 
-4) Búsqueda por Prefijo 
-5) Estadísticas 
-6) Buscar Palabra No
-7) Análisis Comparativo 
-
-0) Salir""")
+        print("""
+╔══════════════════════════════════════════════════╗
+║             BUSCADOR DE PALABRAS                 ║
+║             ESTRUCTURAS DE DATOS                 ║
+╠══════════════════════════════════════════════════╣
+║                                                  ║
+║   [1]  Cargar archivo                            ║
+║   [2]  Búsqueda exacta                           ║
+║   [3]  Búsqueda simple                           ║
+║   [4]  Búsqueda por prefijo                      ║
+║   [5]  Estadísticas                              ║
+║   [6]  Buscar palabra por posición               ║
+║   [7]  Análisis comparativo                      ║
+║                                                  ║
+╠══════════════════════════════════════════════════╣
+║   [0]  Salir                                     ║
+╚══════════════════════════════════════════════════╝
+""")
         
         print("")
         elec = int(input("Eleccion: "))
@@ -27,7 +35,14 @@ while Activo:
         elif elec == 0:
             sali = input("Seguro de querer salir(s/n):").lower()
             if sali == "s":
-                print("Saliendo")
+                print("""
+╔══════════════════════════════════════════════════╗
+║              PROGRAMA FINALIZADO                 ║
+║                                                  ║
+║           Gracias por utilizar nuestro           ║
+║              buscador de palabras                ║
+╚══════════════════════════════════════════════════╝
+""")
                 Activo = False
 
         elif elec != 1 and Archivo_cargado:
@@ -63,18 +78,19 @@ Presione enter para continuar: """)
 
                 Archivo_cargado = True
 
-                print("Archivo cargado con éxito.")
-
-                print("Total de palabras:", len(datos["orden_ids"]))
-
-                print("Palabras diferentes:", len(datos["vocabulario"]))
-
-                enter = input("Presione enter para continuar: ")
+                print("\n" + "═" * 55)
+                print("              ARCHIVO CARGADO")
+                print("═" * 55)
+                print("  Estado: CARGA EXITOSA")
+                print()
+                print(f"  Total de palabras:      {len(datos['orden_ids'])}")
+                print(f"  Palabras diferentes:    {len(datos['vocabulario'])}")
+                print("═" * 55)
+                input("\n[ENTER] Presione Enter para volver al menú...")
                 
             else:
                 print("error, Archivo no fue cargado.")
-                enter = input("""
-Presione enter para continuar: """)
+                input("\n[ENTER] Presione Enter para volver al menú...")
 
         
         

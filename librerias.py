@@ -219,17 +219,20 @@ def Busqueda(datos):
     if registro is None:
         print("La palabra no se encuentra en el .txt")
     else:
-        print("--------- Metodo Dic ----------")
-        print(f"""Palabra encontrada: {palabra}
-Cantidad de apariciones: {registro[1]}
-Primera linea donde se encontro: {registro[2]}
-Ultima Linea donde se vio: {registro[3]}""")
-        print("")
-        
-
-    print("-----------Resultados------------")
-    print(f"tiempo buscando: {tiempo_ms:.6f} milisegundos")
-    enter = input("Presione enter para continuar: ")
+        print("\n" + "═" * 55)
+        print("               BÚSQUEDA EXACTA")
+        print("═" * 55)
+        print()
+        print(f"  Palabra encontrada:     {palabra}")
+        print(f"  Total de apariciones:   {registro[1]}")
+        print(f"  Primera línea:          {registro[2]}")
+        print(f"  Última línea:           {registro[3]}")
+        print()
+    print("─" * 55)
+    print(f"  Tiempo de búsqueda:     {tiempo_ms:.6f} ms")
+    print("═" * 55)
+    print()
+    input("\n[ENTER] Presione Enter para volver al menú...")
 
 
 
@@ -254,7 +257,7 @@ def Busqueda_simple(datos):
 
         print("\nLa palabra no se encuentra en el archivo.")
         print(f"Tiempo de búsqueda: {tiempo_ms:.6f} ms")
-        input("Presione enter para continuar: ")
+        input("\n[ENTER] Presione Enter para volver al menú...")
         return
 
     cantidad = len(posiciones)
@@ -270,15 +273,22 @@ def Busqueda_simple(datos):
     fin = time.perf_counter()
     tiempo_ms = (fin - inicio) * 1000
 
-    print("\n--------- BÚSQUEDA SIMPLE ---------")
+    print("\n" + "═" * 55)
+    print("               BÚSQUEDA SIMPLE")
+    print("          Sin distinguir mayúsculas")
+    print("═" * 55)
     print(f"Palabra buscada: {palabra}")
     print(f"Cantidad de apariciones: {cantidad}")
     print(f"Primera línea: {primera_linea}")
     print(f"Última línea: {ultima_linea}")
-
-    print("----------------------------------")
+    print("═" * 55)
     print(f"Tiempo de búsqueda: {tiempo_ms:.6f} ms")
-    input("Presione enter para continuar: ")
+    print("═" * 55)
+    
+
+    
+    
+    input("\n[ENTER] Presione Enter para volver al menú...")
 
 
 
@@ -333,7 +343,7 @@ def Busqueda_prefijo(datos):
 
         print("\nNo se encontraron palabras con ese prefijo.")
         print(f"Tiempo de búsqueda: {tiempo_ms:.6f} ms")
-        input("Presione enter para continuar: ")
+        input("\n[ENTER] Presione Enter para volver al menú...")
         return
 
     # ---------------------------------
@@ -378,13 +388,13 @@ def Busqueda_prefijo(datos):
     # 4. MOSTRAR TODAS LAS APARICIONES
     # ---------------------------------
 
-    print("\n--------- BÚSQUEDA POR PREFIJO ---------")
-
-    print(f"Prefijo buscado: {prefijo}")
-    print(f"Palabras diferentes encontradas: {len(coincidencias)}")
-    print(f"Total de apariciones: {cantidad}")
-
-    print("\nApariciones en el orden original:\n")
+    print("\n" + "═" * 55)
+    print("              BÚSQUEDA POR PREFIJO")
+    print("═" * 55)
+    print(f"  Prefijo solicitado: {prefijo}")
+    print(f"  Palabras diferentes: {len(coincidencias)}")
+    print(f"  Total de apariciones: {cantidad}")
+    print("─" * 55)
 
     posiciones_ordenadas = merge(
         *(indice[palabra] for palabra in coincidencias)
@@ -404,7 +414,8 @@ def Busqueda_prefijo(datos):
     # 5. RESULTADOS FINALES
     # ---------------------------------
 
-    print("\n--------- RESULTADOS ---------")
+    print("\n" + "═" * 55)
+    print("              Resultados")
 
     print(f"Primera palabra: {primera_palabra}")
     print(f"Primera línea: {primera_linea}")
@@ -414,10 +425,10 @@ def Busqueda_prefijo(datos):
 
     print(f"Total de apariciones: {cantidad}")
 
-    print("----------------------------------")
+    print("═" * 55)
     print(f"Tiempo de búsqueda: {tiempo_ms:.6f} ms")
-    print("(No incluye el tiempo de impresión de resultados)")
-    input("Presione enter para continuar: ")
+    print("═" * 55)
+    input("\n[ENTER] Presione Enter para volver al menú...")
 
 
 def Estadisticas(datos):
@@ -442,18 +453,23 @@ def Estadisticas(datos):
     palabra_central = vocabulario[orden_ids[indice_centro]]
     linea_central = lineas[indice_centro]
 
-    print("\n===== ESTADÍSTICAS DEL ARCHIVO =====")
-
-    print(f"Cantidad total de palabras: {N}")
-
-    print(f"Primera palabra: {primera}")
-    print(f"Posición: 1 | Línea: {linea_primera}")
-
-    print(f"Última palabra: {ultima}")
-    print(f"Posición: {N} | Línea: {linea_ultima}")
-
-    print(f"Palabra central: {palabra_central}")
-    print(f"Posición: {centro} | Línea: {linea_central}")    
+    print("\n" + "═" * 55)
+    print("             ESTADÍSTICAS DEL ARCHIVO")
+    print("═" * 55)
+    print()
+    print(f"  Total de palabras: {N}")
+    print()
+    print(f"  PRIMERA PALABRA: {primera}")
+    print(f"  Posición: 1 | Línea: {linea_primera}")
+    print()
+    print(f"  PALABRA CENTRAL: {palabra_central}")
+    print(f"  Posición: {centro} | Línea: {linea_central}")
+    print()
+    print(f"  ÚLTIMA PALABRA: {ultima}")
+    print(f"  Posición: {N} | Línea: {linea_ultima}")
+    print()
+    print("═" * 55)   
+    input("\n[ENTER] Presione Enter para volver al menú...")
 
 def palabra_numero(datos):
     vocabulario=datos["vocabulario"]
@@ -463,15 +479,17 @@ def palabra_numero(datos):
 
     while True:
         try:
-            num=int(input(f"Ingrese la posicion de la palabra dentro del rango 1-{N}: "))
-            if num<1 or num>N:
-                print(f"La posicion debe estar dentro del rango 1-{N}")
-                num=int(input("Ingrese numero en el rango correcto"))
-            else:
-                break
+            num = int(input(f"Ingrese la posición de la palabra (1-{N}): "))
+
+            if num < 1 or num > N:
+                print(f"Error: la posición debe estar entre 1 y {N}.")
+                continue
+
+            break
 
         except ValueError:
-            print("Error: debe ingresar un numero entero")
+            print("Error: debe ingresar un número entero.")
+
 
     indice=num-1
     #inicio del tiempo de busqueda
@@ -492,6 +510,8 @@ def palabra_numero(datos):
     print(f"Posición: {num}")
     print(f"Línea: {linea}")
     print(f"Tiempo de búsqueda: {tiempo:.6f} ms")
+
+    input("\n[ENTER] Presione Enter para volver al menú...")
 
 def Comparacion(datos):
     palabra = input("Ingrese la palabra que desea buscar: ").strip()
@@ -515,18 +535,7 @@ def Comparacion(datos):
     final_arreglo = time.perf_counter()
     tiempoms_arreglo = (final_arreglo-inicio_arreglo)*1000
 
-    if cantidad == 0:
-        print("palabra no encontrada")
-    else:
-        print("----Metodo Arreglo----")
-        print(f"""Palabra encontrada: {palabra}
-Cantidad de apariciones: {cantidad}
-Primera linea donde se encontro: {primera_linea}
-Ultima Linea donde se vio: {ultima_linea}""")
-        print("""
-""")
-
-        enter = input("Presiona enter para continuar con el otro metodo: ")
+    
     inicio = time.perf_counter()
     #Accedemos al dic que habiamos creado antes y pedimos solo los indices_exactos
     indice = datos["indice_exacto"]
@@ -535,34 +544,54 @@ Ultima Linea donde se vio: {ultima_linea}""")
     fin = time.perf_counter()
     tiempo_ms = (fin-inicio)*1000
         
-    if registro is None:
-        print("La palabra no se encuentra en el .txt")
-    else:
-        print("---Metodo Dic---")
-        print(f"""Palabra encontrada: {palabra}
-Cantidad de apariciones: {registro[1]}
-Primera linea donde se encontro: {registro[2]}
-Ultima Linea donde se vio: {registro[3]}""")
-        print("")
-        enter = input("presione enter para continuar: ")
-
-
-        
+    
+     
 
     diferencia = abs(tiempoms_arreglo - tiempo_ms)   
-    print("----------------------Resultados-------------------")
-    print(f"Método Arreglo O(N): {tiempoms_arreglo:.6f} milisegundos ")
-    print(f"Método Diccionario O(1): {tiempo_ms:.6f} milisegundos")
-    print("")
-    if tiempo_ms < tiempoms_arreglo: 
-        print("Ganador: Metodo Diccionario O(1)")
-        print(f"Diferencia: {diferencia:.6f} ms")
-    elif tiempo_ms > tiempoms_arreglo:
-        print("Ganador: Metodo Arreglo O(N)")
-        print(f"Diferencia: {diferencia:.6f} ms")
+    print("\n" + "═" * 60)
+    print("                  ANÁLISIS COMPARATIVO")
+    print("═" * 60)
+    print()
+    print("  ALGORITMO 1: BÚSQUEDA LINEAL")
+    print("  Estructura: Arreglo")
+    print("  Complejidad: O(N)")
+    print(f"  Tiempo: {tiempoms_arreglo:.6f} ms")
+    print()
+    print("─" * 60)
+    print()
+    print("  ALGORITMO 2: BÚSQUEDA OPTIMIZADA")
+    print("  Estructura: Diccionario")
+    print("  Complejidad: O(1) promedio")
+    print(f"  Tiempo: {tiempo_ms:.6f} ms")
+    print()
+    print("═" * 60)
+    print("                  RESULTADO FINAL")
+    print("═" * 60)
+
+    print()
+    print(f"  Palabra buscada: {palabra}")
+
+    if cantidad == 0:
+        print("  Resultado: Palabra no encontrada")
     else:
-        print("Ganador: Empate")
-        print(f"Diferencia: {diferencia:.6f} ms")
+        print(f"  Apariciones: {cantidad}")
+        print(f"  Primera línea: {primera_linea}")
+        print(f"  Última línea: {ultima_linea}")
+
+    print()
+    print("─" * 60)
+
+    if tiempo_ms < tiempoms_arreglo:
+        print("  GANADOR: DICCIONARIO O(1)")
+
+    elif tiempo_ms > tiempoms_arreglo:
+        print("  GANADOR: ARREGLO O(N)")
+
+    else:
+        print("  RESULTADO: EMPATE")
+
+    print(f"  Diferencia de tiempos: {diferencia:.6f} ms")
+    print("═" * 60) 
 
     # Verificar que ambos algoritmos entreguen los mismos resultados
     if registro is None:
@@ -576,7 +605,7 @@ Ultima Linea donde se vio: {registro[3]}""")
         else:
             print("Verificacion: ambos algortimos entregaron resultados distintos.")
 
-    enter = input("presione enter para continuar: ")
+    input("\n[ENTER] Presione Enter para volver al menú...")
     
         
   
