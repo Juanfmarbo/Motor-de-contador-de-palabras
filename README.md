@@ -1,250 +1,143 @@
-# Buscador eficiente de palabras en archivos de texto
+# Efficient Word Searcher in Text Files
 
-Proyecto final de **Estructura de Datos** · Universidad de La Sabana · 2026  
-Profesor: **Arley Calderón**  
-Equipo: **Juan, Daniel y Sara**
+**Final project — Data Structures**  
+**University of La Sabana · 2026**  
+**Professor:** Arley Calderón  
+**Team:** Juan, Daniel, and Sara
 
-## ¿De qué trata el proyecto?
+## About the project
 
-Desarrollamos un programa de consola en Python que permite cargar un archivo `.txt` y consultar su contenido de diferentes maneras: encontrar palabras exactas, ignorar mayúsculas, buscar por prefijo, revisar estadísticas, recuperar una palabra por su posición y comparar dos estrategias de búsqueda.
+We developed a Python console application that loads a `.txt` file and lets us explore its content in several ways: exact searches, case-insensitive searches, prefix searches, statistics, word retrieval by position, and a comparison of two search methods.
 
-Nuestro objetivo fue **evitar recorrer el archivo completo cada vez que hacemos una consulta**. Para lograrlo, durante la carga construimos estructuras que conservan tanto el orden del texto como índices para encontrar palabras rápidamente.
+Our main objective was **to avoid scanning the entire text for every query**. When the file is loaded, the program builds data structures that preserve the original order of the words and provide fast access to their information.
 
-La solución combina **diccionarios hash, listas, arreglos compactos y búsqueda binaria**. No utilizamos paquetes externos.
+The solution combines **dictionaries (hash tables), lists, compact arrays, and binary search**. It only uses Python's standard library.
 
-## Requisitos
+## Requirements
 
-- **Python 3.10 o superior**, porque el menú utiliza `match/case`.
-- Un archivo de texto con extensión `.txt` y codificación **UTF-8** (también se admite UTF-8 con BOM).
-- Windows, macOS o Linux.
+- **Python 3.10 or newer** (the main menu uses `match/case`).
+- A `.txt` file encoded in **UTF-8** (UTF-8 with BOM is also supported).
+- **Windows, macOS, or Linux**.
 
-Las bibliotecas utilizadas (`pathlib`, `array`, `time`, `bisect` y `heapq`) forman parte de la biblioteca estándar de Python. **No es necesario ejecutar `pip install`**.
+The modules used by the project, such as `pathlib`, `array`, `time`, `bisect`, and `heapq`, are included with Python. **No `pip install` command is required.**
 
-## Estructura del proyecto
+## Project structure
 
 ```text
-Proyecto/
-├── main.py          # Menú principal y control del programa
-├── librerias.py      # Carga, estructuras de datos y búsquedas
-├── Archivos/         # Aquí ubicamos los .txt que queremos analizar
-├── README.md
-└── .gitignore
+Project/
+├── main.py         # Main menu and program control
+├── librerias.py    # File loading, data structures, and search functions
+├── Files/          # Folder for the .txt files to analyze
+├── README.md       # Project documentation
+└── .gitignore      # Files excluded from version control
 ```
 
-Los archivos de texto pueden guardarse en `Archivos/` o cargarse mediante una ruta válida. La carpeta del proyecto se puede copiar completa a otro computador sin necesidad de modificar rutas dentro del código.
+Text files can be stored in `Files/` or accessed through a valid relative or absolute path. The project can be copied to another computer without changing the source code.
 
-## ¿Cómo ejecutar el programa?
+## How to run the program
 
-1. Descargamos o clonamos el proyecto y conservamos juntos `main.py`, `librerias.py` y la carpeta `Archivos`.
-2. Colocamos el archivo `.txt` que queremos estudiar dentro de `Archivos`.
-3. Abrimos una terminal en la carpeta del proyecto.
-4. Ejecutamos el programa:
+1. Download or clone the repository.
+2. Keep `main.py` and `librerias.py` in the same project folder.
+3. Place the text file in `Files/`, or have its path ready.
+4. Open a terminal in the project folder.
+5. Run the program using the command for your operating system.
 
-   **Windows**
+**Windows:**
 
-   ```powershell
-   py main.py
-   ```
+```powershell
+py main.py
+```
 
-   **macOS o Linux**
+**macOS or Linux:**
 
-   ```bash
-   python3 main.py
-   ```
+```bash
+python3 main.py
+```
 
-5. Elegimos **1) Cargar Archivo** e ingresamos el nombre del archivo, por ejemplo `texto.txt`.
-6. Cuando la carga termina correctamente, se habilitan las demás operaciones.
+6. Select **1 — Load file** and enter the file's path, for example `Files/text.txt`.
+7. Once the file loads successfully, choose any of the available queries.
 
-También podemos ingresar una ruta relativa, como `Archivos/texto.txt`, o una ruta absoluta del computador donde se esté ejecutando el programa. Si ya tenemos un archivo cargado, el menú pregunta si queremos reemplazarlo.
+If a file is already loaded, the program asks whether we want to replace it.
 
-> **Importante:** para llevar el programa a otro computador, no debemos copiar únicamente `main.py`. También necesitamos `librerias.py` y los archivos de texto que vayamos a utilizar. No hay que instalar dependencias adicionales.
+> **Important:** When moving the project to another computer, copy both Python files and any text files you want to analyze. There are no additional dependencies to install.
 
-## Menú de opciones
+## Menu options
 
-| Opción | Función | ¿Qué permite hacer? |
+| Option | Function | What it does |
 |:---:|---|---|
-| **1** | Cargar archivo | Leer el `.txt`, validar su contenido y construir los índices. |
-| **2** | Búsqueda exacta | Encontrar una palabra completa, respetando mayúsculas y minúsculas. |
-| **3** | Búsqueda simple | Encontrar una palabra completa sin distinguir mayúsculas y minúsculas. |
-| **4** | Búsqueda por prefijo | Mostrar todas las apariciones de palabras que comienzan por un prefijo. |
-| **5** | Estadísticas | Mostrar el total, la primera palabra, la central y la última. |
-| **6** | Buscar palabra N.º X | Recuperar la palabra y su línea a partir de una posición válida. |
-| **7** | Análisis comparativo | Comparar una búsqueda lineal con una búsqueda por diccionario. |
-| **0** | Salir | Cerrar el programa. |
+| **1** | Load file | Reads and validates a `.txt` file and builds the search structures. |
+| **2** | Exact search | Finds a complete word, respecting uppercase and lowercase letters. |
+| **3** | Simple search | Finds a complete word without distinguishing uppercase and lowercase letters. |
+| **4** | Prefix search | Finds occurrences of words beginning with a given prefix. |
+| **5** | Statistics | Displays general information, including the total number of words and the first, middle, and last words. |
+| **6** | Word No. X | Retrieves the word and its line number from a valid position in the text. |
+| **7** | Comparative analysis | Compares a sequential search with a dictionary-based search and reports their execution times. |
+| **0** | Exit | Closes the program. |
 
-Las opciones **2 a 7** requieren que el archivo se haya cargado correctamente.
+**Options 2–7 require a file to be loaded successfully first.**
 
-### ¿Qué consideramos una palabra?
+## What counts as a word?
 
-Siguiendo el taller, una palabra es cualquier secuencia de caracteres separada por **espacios en blanco o saltos de línea**. Por eso, `casa` y `casa,` son palabras distintas: la puntuación no se elimina automáticamente.
+Following the assignment's rules, a **word is a sequence of characters separated by whitespace**, including spaces, tabs, and line breaks. The program does not automatically remove punctuation.
 
-La búsqueda exacta también distingue `casa` de `Casa`. La búsqueda simple y la de prefijo ignoran esa diferencia usando normalización de texto.
+For example:
 
-## ¿Cómo organizamos los datos?
+- `casa` and `casa,` are **different** words.
+- `casa` and `Casa` are **different** in an exact search.
+- `casa` and `Casa` are treated as **equivalent** in a simple search because their case is normalized.
 
-Al cargar el archivo una sola vez, construimos estas estructuras:
+Prefix searches also use normalized words, so they do not distinguish uppercase and lowercase letters.
 
-| Estructura | Tipo | Información que almacena | Utilidad |
+## How the data is organized
+
+During the initial load, the program builds these structures:
+
+| Structure | Type | Stored information | Purpose |
 |---|---|---|---|
-| `vocabulario` | Lista | Cada palabra original diferente, una sola vez. | Recuperar la palabra a partir de su identificador. |
-| `orden_ids` | `array('I')` | Identificadores de **todas** las apariciones, en el orden del archivo. | Consultar posiciones sin repetir las cadenas. |
-| `lineas` | `array('I')` | Número de línea de cada aparición. | Recuperar la ubicación de una palabra. |
-| `indice_exacto` | Diccionario | Palabra original → identificador, conteo, primera y última línea. | Búsqueda exacta rápida. |
-| `indice_simple` | Diccionario | Palabra normalizada → arreglo de posiciones donde aparece. | Búsqueda sin distinguir mayúsculas. |
-| `claves_ordenadas` | Lista | Claves normalizadas diferentes, ordenadas alfabéticamente. | Búsqueda binaria por prefijo. |
+| `vocabulario` | `list` | Each distinct original word, stored once. | Retrieves a word from its identifier without repeating its string for every occurrence. |
+| `normalizadas` | `list` | Normalized forms associated with the original vocabulary. | Supports case-insensitive queries. |
+| `orden_ids` | `array('I')` | Word identifiers for **every occurrence**, in the file's original order. | Retrieves words by position using compact integers. |
+| `lineas` | `array('I')` | Line number corresponding to each occurrence. | Retrieves the location of a word. |
+| `indice_exacto` | `dict` | Original word → identifier, frequency, first line, and last line. | Answers exact searches quickly. |
+| `indice_simple` | `dict` | Normalized word → compact array of occurrence positions. | Locates every appearance regardless of case. |
+| `claves_ordenadas` | `list` | Distinct normalized keys sorted alphabetically. | Enables prefix searches with binary search. |
 
-El proceso de carga también utiliza una lista temporal de palabras normalizadas para evitar normalizar repetidamente una palabra original. Esta lista temporal no se incluye en el diccionario de datos devuelto al menú.
+The entries at the same position in `orden_ids` and `lineas` describe the **same occurrence**. This allows us to preserve both the order of the text and the line numbers without storing every word as a separate string.
 
-### ¿Por qué usamos `array('I')`?
+## Efficiency and complexity
 
-Cada aparición necesita guardar números (identificadores, líneas o posiciones), pero **no necesita guardar otra copia completa de la palabra**. Un arreglo de enteros sin signo almacena esos números de forma compacta; normalmente cada elemento de tipo `I` ocupa 4 bytes, aunque el tamaño depende de la plataforma. Esto reduce la sobrecarga frente a almacenar millones de objetos `int` en listas de Python.
+Let:
 
-Además, los arreglos permiten recuperar un elemento por su posición en **O(1)**.
+- **N** be the total number of word occurrences in the file.
+- **U** be the number of distinct original words.
+- **V** be the number of distinct normalized words.
+- **m** be the number of distinct normalized words matching a prefix.
+- **k** be the number of occurrences returned by a query.
 
-## Funciones implementadas
-
-### 1. `Cargar_Archivo()`
-
-Lee el texto línea por línea, identifica palabras nuevas, cuenta sus repeticiones, registra posiciones y líneas, construye los dos diccionarios y ordena las claves necesarias para la búsqueda por prefijo.
-
-**Decisión:** invertir trabajo al cargar el archivo para evitar repetirlo en las consultas posteriores. También permite trabajar con rutas relativas al proyecto y manejar errores de apertura y lectura.
-
-### 2. `Busqueda(datos)` — exacta
-
-Consulta `indice_exacto` con la palabra tal como la ingresamos. Obtiene el número de apariciones y las líneas de la primera y la última coincidencia. No acepta coincidencias parciales.
-
-**Decisión:** el diccionario hash permite encontrar el registro directamente, en lugar de recorrer todas las palabras.
-
-### 3. `Busqueda_simple(datos)` — sin distinguir mayúsculas
-
-Normaliza la palabra buscada con `casefold()` y consulta `indice_simple`. Las posiciones registradas permiten obtener el conteo y las líneas extremas sin recorrer el archivo.
-
-**Decisión:** normalizamos una sola vez las claves durante la carga; así no tenemos que transformar y comparar cada aparición en cada búsqueda.
-
-### 4. `Busqueda_prefijo(datos)`
-
-Utiliza búsqueda binaria sobre `claves_ordenadas` para encontrar el inicio de las palabras que comparten el prefijo. Después recupera las coincidencias y une sus posiciones en el orden original mediante una mezcla de secuencias ordenadas (`heapq.merge`). Muestra todas las apariciones con sus líneas.
-
-**Decisión:** buscamos primero entre palabras **diferentes**, en lugar de revisar las **N apariciones**. La mezcla evita crear y ordenar otra lista gigante de resultados.
-
-### 5. `Estadisticas(datos)`
-
-Obtiene directamente el total de palabras, la primera, la última y la central. Para esta última aplicamos la regla del taller: si la mitad da decimal, elegimos la posición inmediatamente superior.
-
-**Decisión:** como `orden_ids` conserva las posiciones originales, no necesitamos recorrer el texto para calcular estos datos.
-
-### 6. `palabra_numero(datos)`
-
-Valida que la posición ingresada sea un entero entre **1 y N**. Luego obtiene el identificador, la palabra original y su línea mediante accesos directos a los arreglos.
-
-**Decisión:** recuperar la palabra N.º X debe costar lo mismo aunque esté al principio o al final del archivo.
-
-### 7. `Comparacion(datos)`
-
-Busca la misma palabra exacta de dos formas:
-
-1. **Búsqueda lineal:** recorre `orden_ids` y compara cada palabra, con complejidad **O(N)**.
-2. **Búsqueda optimizada:** consulta `indice_exacto`, con complejidad **O(1) promedio** respecto al número de palabras.
-
-El programa mide los tiempos en milisegundos, identifica el método más rápido en esa ejecución y verifica que ambos métodos produzcan el mismo conteo y las mismas líneas, incluso si la palabra no aparece.
-
-## Análisis de complejidad Big O
-
-Definimos las variables usadas para analizar el rendimiento:
-
-- **C:** cantidad de caracteres del archivo.
-- **N:** cantidad total de apariciones de palabras.
-- **U:** cantidad de palabras diferentes.
-- **K:** cantidad de palabras diferentes que coinciden con un prefijo.
-- **M:** cantidad total de apariciones que coinciden con ese prefijo.
-- **L:** longitud de la palabra o prefijo ingresado.
-
-| Operación | Tiempo | Memoria adicional por operación |
+| Operation | Expected time complexity | Why |
 |---|---|---|
-| Cargar archivo | **O(C + U log U)** aprox. | **O(N + U)** para conservar los índices y arreglos. |
-| Búsqueda exacta | **O(1) promedio** para palabras de longitud acotada | **O(1)** |
-| Búsqueda simple | **O(L)** promedio por la normalización de la consulta | **O(L)** por la cadena normalizada |
-| Búsqueda por prefijo | **O(log U + K + M log K)** aprox. | **O(K)** |
-| Estadísticas | **O(1)** | **O(1)** |
-| Palabra N.º X | **O(1)** | **O(1)** |
-| Comparación: recorrido lineal | **O(N)** | **O(1)** |
-| Comparación: diccionario | **O(1) promedio**, con L acotada | **O(1)** |
+| Load and index file | `O(N + V log V)` | Processes the occurrences and sorts the normalized search keys once. |
+| Exact search | `O(1)` | Looks up the original word in a dictionary. |
+| Simple search | `O(1 + k)` | Uses a dictionary to find the word, then visits its matching positions if they must be displayed. |
+| Prefix search | `O(log V + m + k)` | Uses binary search to reach the first matching key, then processes matching keys and occurrences. |
+| Statistics / direct positional access | `O(1)` for precomputed totals and direct positions | Reads stored counts or accesses an array position without scanning the text. |
+| Sequential search (comparison) | `O(N)` | May need to inspect every word occurrence. |
+| Indexed search (comparison) | `O(1)` on average | Uses a dictionary instead of checking each occurrence. |
 
-**Cómo interpretar esta tabla:**
+Dictionary lookup is **O(1) on average**, not a guaranteed worst-case bound. When a search prints multiple matches, the time needed to display them also depends on the number of results.
 
-- La memoria **O(1)** de una consulta se refiere a sus **variables auxiliares**, no a toda la memoria del programa. Los índices ya cargados siguen ocupando espacio.
-- El espacio **O(N + U)** resume los identificadores, las posiciones y los registros. Si las palabras tienen longitudes variables, también debemos contabilizar los caracteres de las **U palabras diferentes** y la sobrecarga propia de las estructuras de Python.
-- El tiempo de búsqueda exacta se considera **O(1) promedio respecto a N** por el acceso hash; calcular o comparar cadenas de longitud variable también tiene un costo asociado a **L**.
-- En la carga y la búsqueda por prefijo, las comparaciones de cadenas pueden añadir factores según su longitud; la tabla resume el caso habitual de palabras relativamente cortas.
-- En prefijos, generar **M resultados** exige trabajo proporcional a la cantidad de resultados. Ninguna estructura puede mostrar miles de coincidencias sin procesarlas.
-- El peor caso teórico de una tabla hash puede ser peor que el promedio; **O(1)** no significa que una consulta demore siempre exactamente el mismo número de milisegundos.
+The main data structures require **O(N + U + V)** space, excluding the character storage needed for the distinct words. The arrays keep repeated identifiers and line numbers in a compact format, which is useful when working with large files.
 
-## ¿Por qué no utilizamos una sola estructura?
+### Why we chose these structures
 
-| Alternativa | Ventaja | Desventaja en nuestro problema |
-|---|---|---|
-| Recorrer el archivo para cada búsqueda | Requiere pocos índices adicionales. | Repetiríamos un recorrido **O(N)** en cada consulta por contenido. |
-| Listas tradicionales para todos los números | Son sencillas y permiten acceso directo. | Una lista de muchos enteros de Python tiene más sobrecarga que `array('I')`. |
-| Árbol de prefijos (**Trie**) | Muy útil para consultar prefijos. | Puede requerir numerosos nodos, referencias y más memoria. |
-| Árbol de búsqueda balanceado | Mantiene claves ordenadas y permite consultas **O(log U)**. | La búsqueda exacta sería menos rápida que el promedio de un diccionario hash. |
-| **Diccionarios + arreglos + claves ordenadas** | Exacta rápida, acceso por posición y búsqueda por prefijo. | Necesita una carga inicial y memoria para mantener los índices. |
+- **Dictionaries:** fast access to words without a complete scan for every search.
+- **Lists:** direct access to the unique vocabulary by identifier.
+- **`array('I')`:** more compact storage for large sequences of nonnegative integers than regular Python lists of integers.
+- **Sorted keys + binary search:** fast access to the beginning of a prefix range without examining every distinct word.
+- **Sequential search in option 7:** a baseline that lets us measure the practical benefit of the index.
 
-Nuestra elección se adapta especialmente bien a un escenario donde **cargamos un archivo una vez y consultamos muchas veces**. Para una única búsqueda en un texto pequeño, el costo de construir los índices podría no compensarse.
-
-## Medición de tiempos
-
-Utilizamos `time.perf_counter()`, que devuelve el tiempo en segundos, y lo convertimos a milisegundos multiplicando por 1000.
-
-Las mediciones implementadas corresponden a la **operación interna de búsqueda**, una vez recibida la entrada del usuario. No incluyen el tiempo que la persona tarda escribiendo ni la construcción inicial de los índices; tampoco incluyen la impresión de los resultados. Esta distinción es importante al interpretar la comparación entre **O(N)** y **O(1) promedio**.
-
-Los tiempos reales pueden variar según el computador, el tamaño del texto y las condiciones de ejecución. Por eso no presentamos una medición aislada como prueba matemática de Big O: la complejidad se justifica por el algoritmo y los tiempos sirven para observar su comportamiento.
-
-## Pruebas realizadas
-
-Probamos la lógica del programa con un archivo generado específicamente para comprobar casos normales y extremos:
-
-| Característica | Resultado |
-|---|---:|
-| Apariciones totales | **2.000.001** |
-| Palabras originales diferentes | **50.020** |
-| Líneas | **80.001** |
-
-Algunos casos de verificación fueron:
-
-- **Exacta:** `casa` y `Casa` se contabilizan por separado.
-- **Simple:** `cAsA` reúne las variantes de mayúsculas y minúsculas.
-- **Prefijo:** un prefijo poco frecuente devuelve sus coincidencias y líneas en orden original.
-- **Estadísticas:** la primera, central y última palabras coinciden con marcadores colocados en esas posiciones.
-- **Palabra N.º X:** se verificaron posiciones al inicio, al centro y al final.
-- **Comparación:** el recorrido y el diccionario entregan el mismo conteo y las mismas líneas.
-- **Casos sin resultados:** las búsquedas informan cuando no encuentran coincidencias.
-
-También contemplamos casos de error como archivo inexistente, vacío, sin permisos, codificación inválida, posiciones fuera de rango y entradas no numéricas.
-
-## Manejo de errores y portabilidad
-
-- Verificamos que el nombre ingresado no esté vacío y que el archivo tenga extensión `.txt`.
-- Controlamos errores de archivo inexistente, permisos insuficientes, codificación, memoria y errores del sistema de archivos.
-- Mantenemos los datos anteriores cuando una nueva carga no se completa correctamente.
-- Las rutas relativas se resuelven tomando como referencia la carpeta de `librerias.py`, no una ruta fija del computador donde programamos.
-- Las opciones de búsqueda solo pueden usarse después de una carga válida.
-- Trabajamos únicamente con bibliotecas estándar de Python, lo que facilita ejecutar el proyecto en distintos equipos.
-
-## Limitaciones conocidas
-
-- El texto debe estar codificado en UTF-8 o UTF-8 con BOM.
-- La separación de palabras depende de espacios en blanco; **no eliminamos signos de puntuación**, porque así se define la palabra en el taller.
-- Los índices permanecen en memoria mientras el archivo está cargado. En textos muy grandes, la memoria disponible del equipo puede limitar la carga.
-- El tipo `array('I')` tiene un rango entero máximo dependiente de la plataforma; para cantidades de apariciones extraordinariamente grandes habría que revisar ese límite.
-- En una búsqueda por prefijo muy común, mostrar cada aparición puede producir una salida extensa en consola.
-- Las comparaciones de tiempos no consideran el costo de preprocesamiento; esa inversión se aprovecha cuando hacemos consultas repetidas.
-
-## Conclusión
-
-El proyecto nos permitió comprobar que **la estructura de datos correcta depende de la operación que queremos resolver**. Los diccionarios nos ayudan a buscar palabras rápidamente, los arreglos conservan el orden y permiten consultar posiciones directamente, y las claves ordenadas hacen posible buscar por prefijo sin revisar todas las apariciones.
-
-Nuestra solución prioriza **rapidez en consultas repetidas y un uso razonable de memoria**, reconociendo el costo de construir los índices y las limitaciones propias de cada alternativa.
+The trade-off is that **loading and indexing require extra time and memory at the beginning**, but repeated searches become much faster. This design is especially helpful when we want to make many queries against the same large text file.
 
 ---
 
-**Proyecto final de Estructura de Datos — Universidad de La Sabana, 2026.**
+**Final project for Data Structures — University of La Sabana, 2026.**
